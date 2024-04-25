@@ -3,11 +3,11 @@ echo "---------- Dynamic Theme Generator ----------"
 
 ## Select images and store it to variables
 kdialog --title "Dynamic Theme Generator - Light Theme" --msgbox "A file picker will open and you'll need to select the LIGHT image"
-lightImagePath=$(kdialog --getopenfilename $HOME 'image/*')
+lightImagePath=$(kdialog --getopenfilename $HOME)
 lightImageExtension=$(echo "${lightImagePath##*.}")
 
 kdialog --title "Dynamic Theme Generator - Dark Theme" --msgbox "A file picker will open and you'll need to select the DARK image"
-darkImagePath=$(kdialog --getopenfilename $HOME 'image/*')
+darkImagePath=$(kdialog --getopenfilename $HOME)
 darkImageExtension=$(echo "${darkImagePath##*.}")
 
 ## Show input to user to write the theme name
@@ -27,18 +27,37 @@ dbusRef=`kdialog --title "Dynamic Theme Generator - Generating Files" --progress
 qdbus-qt5 $dbusRef Set "" value 1
 
 ## Remove old wallpaper if wallpaper with same name exists
-wallpaperPath="$HOME/.local/share/wallpapers/$themeName"
-if [ -d "$wallpaperPath" ]; then
-    rm -r $wallpaperPath
-fi
+wallpaperPath="/usr/share/wallpapers/$themeName"
 
+## Show input to user to write the password
+while [ ! "$password" ]
+do
+    password=$(kdialog --title "Dynamic Theme Generator - Password" --password "Please enter the password")
+    if [ ! "$password" ]; then
+        kdialog --error "Password should not be empty!"
+    fi
+done
 ## Create Metadata file
-mkdir -p "$wallpaperPath"
-touch "$wallpaperPath/metadata.desktop"
+echo $password | sudo -S rm -rf $wallpaperPath
+echo $password | sudo -S mkdir -p "$wallpaperPath"
+echo $password | sudo -S touch "$wallpaperPath/metadata.json"
 
 ## Write in Metadata file
-echo "[Desktop Entry]" >> "$wallpaperPath/metadata.desktop"
-echo "Name=$themeName" >> "$wallpaperPath/metadata.desktop"
+echo $password | sudo -S tee "$wallpaperPath/metadata.json" > /dev/null <<EOT
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Dynamic Theme Generator"
+            }
+        ],
+        "Id": "$themeName",
+        "License": "GPLv2",
+        "Name": "$themeName"
+    }
+}
+EOT
+
 
 ## Show progressbar - Second step
 qdbus-qt5 $dbusRef setLabelText "Creating folders and copying the LIGHT image"
@@ -46,8 +65,8 @@ qdbus-qt5 $dbusRef Set "" value 2
 
 ## Copy LIGHT image
 lightImageFolder="$wallpaperPath/contents/images"
-mkdir -p "$lightImageFolder"
-cp "$lightImagePath" "$lightImageFolder/$screenResolution.$lightImageExtension"
+echo $password | sudo -S mkdir -p "$lightImageFolder"
+echo $password | sudo -S cp "$lightImagePath" "$lightImageFolder/$screenResolution.$lightImageExtension"
 
 ## Show progressbar - Third step
 qdbus-qt5 $dbusRef setLabelText "Creating folders and copying the DARK image"
@@ -55,8 +74,8 @@ qdbus-qt5 $dbusRef Set "" value 3
 
 ## Copy DARK image
 darkImageFolder="$wallpaperPath/contents/images_dark"
-mkdir -p "$darkImageFolder"
-cp "$darkImagePath" "$darkImageFolder/$screenResolution.$darkImageExtension"
+echo $password | sudo -S mkdir -p "$darkImageFolder"
+echo $password | sudo -S cp "$darkImagePath" "$darkImageFolder/$screenResolution.$darkImageExtension"
 
 ## Close progressbar
 qdbus-qt5 $dbusRef close

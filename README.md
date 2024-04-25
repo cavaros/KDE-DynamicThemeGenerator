@@ -2,6 +2,10 @@
 Simple script to generate dynamic wallpaper (light and dark) from two selected images.
 
 To run it you need to:
+
+Requirements:
+        `libqt5-qdbus`
+
 1. Download this script
 2. Right click on it then go to Properties > Permissions > Check "Is executable" > Press "Ok".
 3. Now you can just open it and select "Execute".
@@ -14,3 +18,6 @@ https://user-images.githubusercontent.com/33737137/196675442-0d711edc-86cf-4967-
 
 #### It also works with animated images
 https://user-images.githubusercontent.com/33737137/196675732-08dc8017-b2ff-4cad-be36-e08bf8e191da.mp4
+
+
+Forked from `DenysMb/KDE-DynamicThemeGenerator` to work with my openSUSE Tumbleweed
