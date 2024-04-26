@@ -24,7 +24,7 @@ screenResolution=$(xdpyinfo | grep dimensions | sed -r 's/^[^0-9]*([0-9]+x[0-9]+
 
 ## Show progressbar - First step
 dbusRef=`kdialog --title "Dynamic Theme Generator - Generating Files" --progressbar "Generating the metadata file" 3`
-qdbus-qt5 $dbusRef Set "" value 1
+qdbus $dbusRef Set "" value 1
 
 ## Remove old wallpaper if wallpaper with same name exists
 wallpaperPath="/usr/share/wallpapers/$themeName"
@@ -60,8 +60,8 @@ EOT
 
 
 ## Show progressbar - Second step
-qdbus-qt5 $dbusRef setLabelText "Creating folders and copying the LIGHT image"
-qdbus-qt5 $dbusRef Set "" value 2
+qdbus $dbusRef setLabelText "Creating folders and copying the LIGHT image"
+qdbus $dbusRef Set "" value 2
 
 ## Copy LIGHT image
 lightImageFolder="$wallpaperPath/contents/images"
@@ -69,8 +69,8 @@ echo $password | sudo -S mkdir -p "$lightImageFolder"
 echo $password | sudo -S cp "$lightImagePath" "$lightImageFolder/$screenResolution.$lightImageExtension"
 
 ## Show progressbar - Third step
-qdbus-qt5 $dbusRef setLabelText "Creating folders and copying the DARK image"
-qdbus-qt5 $dbusRef Set "" value 3
+qdbus $dbusRef setLabelText "Creating folders and copying the DARK image"
+qdbus $dbusRef Set "" value 3
 
 ## Copy DARK image
 darkImageFolder="$wallpaperPath/contents/images_dark"
@@ -78,7 +78,7 @@ echo $password | sudo -S mkdir -p "$darkImageFolder"
 echo $password | sudo -S cp "$darkImagePath" "$darkImageFolder/$screenResolution.$darkImageExtension"
 
 ## Close progressbar
-qdbus-qt5 $dbusRef close
+qdbus $dbusRef close
 
 ### Final message
 kdialog --title "Dynamic Theme Generator - Final" --msgbox "The wallpaper was successfully generated."
