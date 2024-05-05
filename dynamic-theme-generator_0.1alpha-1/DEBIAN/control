@@ -1,0 +1,6 @@
+Package: dynamic-theme-generator
+Version: 0.1alpha-1
+Architecture: all
+Maintainer: Lucas <lucas.camargobatista@icloud.com>
+Description: Dynamic Theme Generator
+ Application to create light/dark wallpaper pairs.

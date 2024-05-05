@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Dynamic Theme Generator
+Comment=Create light/dark pair wallpapers for KDE
+Comment[pt_BR]=Criar papel de parede em pares claro/escuro para o KDE
+GenericName=Theme maker
+Exec=/usr/local/bin/dtg/dtg.sh
+Icon=preferences-desktop-theme-global
+Type=Application
+StartupNotify=true
+Categories=Utility;Development;
+Keywords=dtg;
